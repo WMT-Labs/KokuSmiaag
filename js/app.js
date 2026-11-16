@@ -63,8 +63,7 @@
             el('span', { class: 'result-main' }, [
               el('strong', null, p.nama),
               el('small', null, p.tingkatan + ' ' + p.kelas)
-            ]),
-            lencanaRumah(p.rumah)
+            ])
           ])));
         });
       })

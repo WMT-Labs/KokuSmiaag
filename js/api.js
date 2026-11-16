@@ -55,7 +55,7 @@ window.KokuAPI = (function () {
       return tangguh({
         jumlah: padan.length,
         senarai: padan.slice(0, MAX_HASIL).map(function (p) {
-          return { id: p.id, nama: p.nama, tingkatan: p.tingkatan, kelas: p.kelas, rumah: p.rumah };
+          return { id: p.id, nama: p.nama, tingkatan: p.tingkatan, kelas: p.kelas };
         })
       });
     },

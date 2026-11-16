@@ -1,4 +1,4 @@
-# Koku SMIAAG
+# Jabatan Kokurikulum SMIAAG
 
 Laman semakan rekod kokurikulum pelajar SMIAAG (paparan pelajar sahaja). Pengisian data dibuat oleh pentadbir melalui sistem profil guru.
 
@@ -26,7 +26,8 @@ python3 -m http.server 8080
 
 ## Peraturan paparan
 
-- Umum: nama, tingkatan, kelas, rumah sukan, badan beruniform, kelab, sukan rasmi, wakil sekolah, pencapaian yang disahkan, aktiviti ekstra.
+- Hasil carian: nama dan kelas sahaja.
+- Profil umum: nama, kelas, rumah sukan, badan beruniform, kelab, sukan rasmi, wakil sekolah, pencapaian yang disahkan, aktiviti ekstra.
 - Dengan PIN: pangkat, jawatan, rekod tahun lepas, pencapaian yang menunggu pengesahan.
 - Carian perlukan sekurang-kurangnya 3 huruf nama dan dihadkan kepada 25 hasil.
 - Pelajar boleh hantar rekod pencapaian tanpa PIN, maksimum 5 rekod menunggu pengesahan, dan mesti akui ada sijil atau bukti.
