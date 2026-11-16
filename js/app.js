@@ -29,32 +29,12 @@
   }
 
   function lencanaRumah(rumah) {
-    if (!rumah) return el('span', { class: 'rumah rumah-kosong' }, 'Rumah belum diisi');
+    if (!rumah) return el('span', { class: 'badge badge-near' }, 'Rumah belum diisi');
     var warna = (C.RUMAH[rumah] || {}).warna || '';
-    return el('span', { class: 'rumah rumah-' + warna }, [el('i', { 'aria-hidden': 'true' }), rumah]);
+    return el('span', { class: 'house house-' + warna }, [el('i', { 'aria-hidden': 'true' }), rumah]);
   }
   function nilai(v) {
     return v ? el('span', { class: 'nilai' }, v) : el('span', { class: 'nilai belum' }, 'Belum diisi');
-  }
-
-  /* ---------- Latar belakang ---------- */
-  function mulaLatar() {
-    var gambar = C.BG_IMAGES || [];
-    if (!gambar.length) return;
-    var a = $('bg-a'), b = $('bg-b'), i = 0, atas = a;
-    a.style.backgroundImage = 'url("' + gambar[0] + '")';
-    a.classList.add('on');
-    var senyap = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (gambar.length < 2 || senyap) return;
-    setInterval(function () {
-      if (document.hidden) return;
-      i = (i + 1) % gambar.length;
-      var bawah = atas === a ? b : a;
-      bawah.style.backgroundImage = 'url("' + gambar[i] + '")';
-      bawah.classList.add('on');
-      atas.classList.remove('on');
-      atas = bawah;
-    }, C.BG_INTERVAL_MS || 14000);
   }
 
   /* ---------- Carian ---------- */
@@ -82,7 +62,7 @@
           hasil.appendChild(el('li', null, el('a', { class: 'result', href: '#/pelajar/' + p.id }, [
             el('span', { class: 'result-main' }, [
               el('strong', null, p.nama),
-              el('small', null, 'Tingkatan ' + p.tingkatan + ' ' + p.kelas)
+              el('small', null, p.tingkatan + ' ' + p.kelas)
             ]),
             lencanaRumah(p.rumah)
           ])));
@@ -102,7 +82,7 @@
   }
 
   function jadualPencapaian(senarai, tunjukStatus) {
-    var t = el('table', { class: 'jadual' });
+    var t = el('table', { class: 'data' });
     t.appendChild(el('thead', null, el('tr', null, [
       el('th', null, 'Tahun'), el('th', null, 'Sukan / pasukan'), el('th', null, 'Kejohanan'),
       el('th', null, 'Peringkat'), el('th', null, 'Pencapaian'), tunjukStatus ? el('th', null, 'Status') : null
@@ -113,11 +93,11 @@
         el('td', { 'data-l': 'Tahun' }, x.tahun), el('td', { 'data-l': 'Sukan' }, x.sukan),
         el('td', { 'data-l': 'Kejohanan' }, x.kejohanan), el('td', { 'data-l': 'Peringkat' }, x.peringkat),
         el('td', { 'data-l': 'Pencapaian' }, x.pencapaian),
-        tunjukStatus ? el('td', { 'data-l': 'Status' }, el('span', { class: 'tag' }, x.status)) : null
+        tunjukStatus ? el('td', { 'data-l': 'Status' }, el('span', { class: 'badge badge-near' }, x.status)) : null
       ]));
     });
     t.appendChild(b);
-    return el('div', { class: 'jadual-wrap' }, t);
+    return el('div', { class: 'card table-wrap' }, t);
   }
 
   function paparProfil(p) {
@@ -128,7 +108,7 @@
     k.appendChild(el('div', { class: 'profil-kepala' }, [
       el('div', null, [
         el('h1', { class: 'page-title' }, p.nama),
-        el('p', { class: 'page-sub' }, 'Tingkatan ' + p.tingkatan + ' ' + p.kelas + ' · Sesi ' + C.TAHUN_SEMASA)
+        el('p', { class: 'page-sub' }, 'Kelas ' + p.tingkatan + ' ' + p.kelas + ' · Sesi ' + C.TAHUN_SEMASA)
       ]),
       lencanaRumah(p.rumah)
     ]));
@@ -152,10 +132,9 @@
       : el('p', { class: 'muted' }, 'Tiada rekod pencapaian yang disahkan.'));
 
     k.appendChild(el('div', { class: 'tindakan' }, [
-      el('button', { class: 'btn btn-primary', type: 'button', onclick: bukaHantar }, 'Hantar rekod pencapaian'),
-      el('button', { class: 'btn btn-ghost', type: 'button', onclick: bukaPin }, 'Lihat rekod terperinci (PIN)')
+      el('button', { class: 'btn', type: 'button', onclick: bukaHantar }, 'Hantar rekod pencapaian'),
+      el('button', { class: 'btn btn-secondary', type: 'button', onclick: bukaPin }, 'Lihat rekod terperinci (PIN)')
     ]));
-    k.appendChild(el('p', { class: 'toast', id: 'toast', role: 'status' }));
     k.appendChild(el('div', { id: 'terperinci' }));
   }
 
@@ -165,7 +144,7 @@
     var kotak = el('div', { class: 'terperinci' }, [
       el('div', { class: 'terperinci-kepala' }, [
         el('h2', null, 'Rekod terperinci'),
-        el('button', { class: 'btn btn-ghost btn-kecil', type: 'button', onclick: function () { kosongkan(k); } }, 'Tutup')
+        el('button', { class: 'btn btn-secondary btn-sm', type: 'button', onclick: function () { kosongkan(k); } }, 'Tutup')
       ]),
       el('div', { class: 'grid' }, [
         kad('Pangkat (badan beruniform)', nilai(d.pangkat), semasa.uniform),
@@ -175,7 +154,7 @@
 
     kotak.appendChild(el('h3', { class: 'sek-tajuk' }, 'Rekod tahun lepas'));
     if (d.sejarah.length) {
-      var t = el('table', { class: 'jadual' });
+      var t = el('table', { class: 'data' });
       t.appendChild(el('thead', null, el('tr', null, ['Tahun', 'Tingkatan', 'Badan beruniform', 'Pangkat', 'Kelab', 'Jawatan', 'Sukan rasmi']
         .map(function (h) { return el('th', null, h); }))));
       var b = el('tbody');
@@ -188,7 +167,7 @@
         ]));
       });
       t.appendChild(b);
-      kotak.appendChild(el('div', { class: 'jadual-wrap' }, t));
+      kotak.appendChild(el('div', { class: 'card table-wrap' }, t));
     } else {
       kotak.appendChild(el('p', { class: 'muted' }, 'Tiada rekod tahun lepas.'));
     }
@@ -204,14 +183,21 @@
 
   /* ---------- Dialog ---------- */
   function bukaPin() {
-    $('pin').value = ''; $('pin-err').textContent = '';
+    $('pin').value = ''; ralat('pin-err', '');
     $('dlg-pin').showModal(); $('pin').focus();
   }
   function bukaHantar() {
-    $('form-hantar').reset(); $('hantar-err').textContent = '';
+    $('form-hantar').reset(); ralat('hantar-err', '');
     $('dlg-hantar').showModal();
   }
-  function toast(msg) { var t = $('toast'); if (t) t.textContent = msg; }
+  function ralat(id, msg) { var n = $(id); n.textContent = msg; n.hidden = !msg; }
+  function toast(msg) {
+    var lama = document.querySelector('.toast');
+    if (lama) lama.remove();
+    var t = el('div', { class: 'toast', role: 'status' }, msg);
+    document.body.appendChild(t);
+    setTimeout(function () { t.remove(); }, 6000);
+  }
 
   function pasangDialog() {
     [].forEach.call(document.querySelectorAll('[data-close]'), function (b) {
@@ -223,7 +209,7 @@
       if (!semasa) return;
       API.terperinci(semasa.id, $('pin').value)
         .then(function (d) { $('dlg-pin').close(); paparTerperinci(d); })
-        .catch(function (er) { $('pin-err').textContent = er.message; });
+        .catch(function (er) { ralat('pin-err', er.message); });
     });
 
     var sel = $('h-sukan');
@@ -243,12 +229,12 @@
       if (!semasa) return;
       API.hantarPencapaian(semasa.id, {
         sukan: $('h-sukan').value, kejohanan: $('h-kejohanan').value, peringkat: $('h-peringkat').value,
-        pencapaian: $('h-pencapaian').value, tahun: $('h-tahun').value
+        pencapaian: $('h-pencapaian').value, tahun: $('h-tahun').value, akuSijil: $('h-aku').checked
       }).then(function () {
         $('dlg-hantar').close();
         kosongkan($('terperinci'));
-        toast('Rekod dihantar. Ia akan dipaparkan selepas guru sahkan.');
-      }).catch(function (er) { $('hantar-err').textContent = er.message; });
+        toast('Rekod dihantar. Ia akan dipaparkan selepas guru sahkan. Simpan sijil anda sebagai bukti.');
+      }).catch(function (er) { ralat('hantar-err', er.message); });
     });
   }
 
@@ -307,13 +293,23 @@
   /* ---------- Mula ---------- */
   document.addEventListener('DOMContentLoaded', function () {
     if (C.DEMO) $('demo-bar').hidden = false;
-    mulaLatar();
 
     isiSelect($('f-tingkatan'), [1, 2, 3, 4, 5].map(function (t) { return { v: t, t: 'Tingkatan ' + t }; }), 'Semua');
-    API.senaraiKelas().then(function (k) { isiSelect($('f-kelas'), k, 'Semua'); });
+    API.senaraiKelas().then(function (peta) {
+      function isiKelas() {
+        var t = $('f-tingkatan').value, dulu = $('f-kelas').value, senarai = [];
+        Object.keys(peta).forEach(function (ting) {
+          if (t && t !== ting) return;
+          peta[ting].forEach(function (k) { senarai.push({ v: k, t: ting + ' ' + k }); });
+        });
+        isiSelect($('f-kelas'), senarai, 'Semua');
+        if (senarai.some(function (x) { return x.v === dulu; })) $('f-kelas').value = dulu;
+      }
+      isiKelas();
+      $('f-tingkatan').addEventListener('change', function () { isiKelas(); jalankanCarian(); });
+    });
 
     $('q').addEventListener('input', carianTertunda);
-    $('f-tingkatan').addEventListener('change', jalankanCarian);
     $('f-kelas').addEventListener('change', jalankanCarian);
     $('form-cari').addEventListener('submit', function (e) { e.preventDefault(); jalankanCarian(); });
 

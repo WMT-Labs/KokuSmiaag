@@ -6,23 +6,19 @@
   <title>Koku SMIAAG — Rekod Kokurikulum Pelajar</title>
   <meta name="description" content="Semakan rekod kokurikulum pelajar SMIAAG: badan beruniform, kelab, sukan dan permainan, rumah sukan dan aktiviti ekstra kokurikulum.">
   <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="assets/favicon-64.png">
+  <meta name="theme-color" content="#00548d">
+  <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Gambar aktiviti koku di belakang. Senarai gambar ditetapkan dalam js/config.js -->
-  <div class="bg" aria-hidden="true">
-    <div class="bg-layer" id="bg-a"></div>
-    <div class="bg-layer" id="bg-b"></div>
-    <div class="bg-veil"></div>
-  </div>
-
   <header class="topbar">
     <div class="wrap topbar-in">
       <a class="brand" href="#/">
-        <span class="brand-mark" aria-hidden="true">K</span>
+        <img class="brand-logo" src="assets/logo-96.png" alt="" width="44" height="44">
         <span class="brand-text">
-          <strong>Koku SMIAAG</strong>
-          <small>Rekod kokurikulum pelajar</small>
+          <b>Koku SMIAAG</b>
+          <span>Rekod kokurikulum pelajar</span>
         </span>
       </a>
       <nav class="nav" aria-label="Menu utama">
@@ -32,7 +28,7 @@
     </div>
   </header>
 
-  <div class="demo-bar" id="demo-bar" hidden>
+  <div class="demo-bar" id="demo-bar" role="note" hidden>
     Mod demo: semua data di sini adalah data rekaan, bukan pelajar sebenar. PIN demo untuk semua pelajar: <strong>2468</strong>
   </div>
 
@@ -44,25 +40,21 @@
       <p class="page-sub">Taip sekurang-kurangnya 3 huruf nama pelajar. Guna tingkatan dan kelas untuk kecilkan carian.</p>
 
       <form class="search" id="form-cari" role="search" autocomplete="off">
-        <label class="field field-grow">
-          <span class="label">Nama pelajar</span>
+        <div class="field field-grow">
+          <label for="q">Nama pelajar</label>
           <span class="input-icon">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-            <input type="search" id="q" placeholder="Contoh: Aiman" maxlength="60" inputmode="text">
+            <input class="input" type="search" id="q" placeholder="Contoh: Aiman" maxlength="60" inputmode="text">
           </span>
-        </label>
-        <label class="field">
-          <span class="label">Tingkatan</span>
-          <select id="f-tingkatan">
-            <option value="">Semua</option>
-          </select>
-        </label>
-        <label class="field">
-          <span class="label">Kelas</span>
-          <select id="f-kelas">
-            <option value="">Semua</option>
-          </select>
-        </label>
+        </div>
+        <div class="field">
+          <label for="f-tingkatan">Tingkatan</label>
+          <select class="select" id="f-tingkatan"><option value="">Semua</option></select>
+        </div>
+        <div class="field">
+          <label for="f-kelas">Kelas</label>
+          <select class="select" id="f-kelas"><option value="">Semua</option></select>
+        </div>
       </form>
 
       <p class="status" id="cari-status" role="status" aria-live="polite"></p>
@@ -90,53 +82,64 @@
   </footer>
 
   <!-- ===== Dialog PIN ===== -->
-  <dialog id="dlg-pin" class="dlg">
-    <form method="dialog" id="form-pin" class="dlg-body">
-      <h2>Rekod terperinci</h2>
-      <p class="muted">Masukkan PIN yang diberi oleh guru koku. PIN ini untuk kegunaan sekali dan akan ditukar selepas selesai.</p>
-      <label class="field">
-        <span class="label">PIN</span>
-        <input type="password" id="pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" required>
-      </label>
-      <p class="err" id="pin-err" role="alert"></p>
-      <div class="dlg-actions">
-        <button type="button" class="btn btn-ghost" data-close>Batal</button>
-        <button type="submit" class="btn btn-primary">Semak</button>
+  <dialog id="dlg-pin" class="modal" aria-labelledby="pin-tajuk">
+    <form method="dialog" id="form-pin">
+      <div class="modal-head"><h2 id="pin-tajuk">Rekod terperinci</h2></div>
+      <div class="modal-body">
+        <p class="muted">Masukkan PIN yang diberi oleh guru koku. PIN ini untuk kegunaan sekali dan akan ditukar selepas selesai.</p>
+        <div class="field">
+          <label for="pin">PIN</label>
+          <input class="input" type="password" id="pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" required>
+        </div>
+        <div class="notice notice-error" id="pin-err" role="alert" hidden></div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary" data-close>Batal</button>
+        <button type="submit" class="btn">Semak</button>
       </div>
     </form>
   </dialog>
 
   <!-- ===== Dialog hantar pencapaian ===== -->
-  <dialog id="dlg-hantar" class="dlg">
-    <form method="dialog" id="form-hantar" class="dlg-body">
-      <h2>Hantar rekod pencapaian</h2>
-      <p class="muted">Rekod ini akan disemak oleh guru. Ia hanya dipaparkan selepas disahkan.</p>
-      <label class="field">
-        <span class="label">Sukan / pasukan</span>
-        <select id="h-sukan" required></select>
-      </label>
-      <label class="field">
-        <span class="label">Nama kejohanan atau pertandingan</span>
-        <input type="text" id="h-kejohanan" maxlength="100" required placeholder="Contoh: Kejohanan Badminton MSSD">
-      </label>
-      <div class="row-2">
-        <label class="field">
-          <span class="label">Peringkat</span>
-          <select id="h-peringkat" required></select>
+  <dialog id="dlg-hantar" class="modal" aria-labelledby="hantar-tajuk">
+    <form method="dialog" id="form-hantar">
+      <div class="modal-head"><h2 id="hantar-tajuk">Hantar rekod pencapaian</h2></div>
+      <div class="modal-body">
+        <p class="muted">Rekod ini akan disemak oleh guru dan hanya dipaparkan selepas disahkan. Maksimum 5 rekod menunggu pengesahan pada satu masa.</p>
+        <div class="field">
+          <label for="h-sukan">Sukan / pasukan</label>
+          <select class="select" id="h-sukan" required></select>
+        </div>
+        <div class="field">
+          <label for="h-kejohanan">Nama kejohanan atau pertandingan</label>
+          <input class="input" type="text" id="h-kejohanan" maxlength="100" required placeholder="Contoh: Kejohanan Badminton MSSD">
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label for="h-peringkat">Peringkat</label>
+            <select class="select" id="h-peringkat" required></select>
+          </div>
+          <div class="field">
+            <label for="h-pencapaian">Pencapaian</label>
+            <select class="select" id="h-pencapaian" required></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="h-tahun">Tahun</label>
+          <select class="select" id="h-tahun" required></select>
+        </div>
+        <div class="notice notice-warn">
+          <span><b>Simpan sijil anda.</b> Guru boleh minta sijil atau bukti lain untuk pencapaian ini pada bila-bila masa. Rekod tanpa bukti tidak akan disahkan.</span>
+        </div>
+        <label class="check">
+          <input type="checkbox" id="h-aku" required>
+          <span>Saya ada sijil atau bukti untuk pencapaian ini dan boleh tunjukkannya bila diminta.</span>
         </label>
-        <label class="field">
-          <span class="label">Pencapaian</span>
-          <select id="h-pencapaian" required></select>
-        </label>
+        <div class="notice notice-error" id="hantar-err" role="alert" hidden></div>
       </div>
-      <label class="field">
-        <span class="label">Tahun</span>
-        <select id="h-tahun" required></select>
-      </label>
-      <p class="err" id="hantar-err" role="alert"></p>
-      <div class="dlg-actions">
-        <button type="button" class="btn btn-ghost" data-close>Batal</button>
-        <button type="submit" class="btn btn-primary">Hantar untuk pengesahan</button>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary" data-close>Batal</button>
+        <button type="submit" class="btn">Hantar untuk pengesahan</button>
       </div>
     </form>
   </dialog>

@@ -8,15 +8,6 @@ window.KOKU_CONFIG = {
 
   TAHUN_SEMASA: 2026,
 
-  // Gambar aktiviti koku untuk latar belakang. Letak fail dalam assets/bg/ dan senaraikan di sini.
-  // Saiz dicadangkan: lebar 1600px, JPG/WebP, bawah 250KB setiap satu.
-  BG_IMAGES: [
-    'assets/bg/contoh-1.svg',
-    'assets/bg/contoh-2.svg',
-    'assets/bg/contoh-3.svg'
-  ],
-  BG_INTERVAL_MS: 14000,
-
   RUMAH: {
     Fatah: { warna: 'merah' },
     Falah: { warna: 'hijau' },
@@ -53,11 +44,17 @@ window.KOKU_CONFIG = {
     'Pasukan Debat Bahasa Inggeris', 'Pasukan Debat Bahasa Melayu'
   ],
 
-  // SEMENTARA: senarai sebenar unit beruniform belum diterima.
-  UNIFORM: [
-    'Pengakap', 'Puteri Islam', 'Kadet Remaja Sekolah', 'Persatuan Bulan Sabit Merah',
-    'Kadet Bomba', 'Kadet Polis'
-  ],
+  UNIFORM: ['KRS', 'KASPA', 'BSMM', 'Puteri Islam'],
+
+  // Kelas ikut tingkatan. Nama kelas unik untuk seluruh sekolah.
+  KELAS: {
+    1: ['Qurtubi', 'Ibnu Kathir', 'Arobi', 'Urwah', 'Tabari'],
+    2: ['Hassan', 'Maliki', 'Sufian', 'Hanbali', 'Uthman'],
+    3: ['Hanafi', 'Syafie', 'Suyuthi', 'Ar-Razi'],
+    4: ['Imanuddin', 'Nuruddin', 'Salahuddin', 'Thariq', 'Saifuddin'],
+    5: ['Saad', 'Said', 'Salman', 'Suhaib', 'Sofwan']
+  },
+  MAKS_MENUNGGU: 5,
 
   PERINGKAT: ['Sekolah', 'Daerah', 'Negeri', 'Kebangsaan', 'Antarabangsa'],
   PENCAPAIAN: ['Johan', 'Naib Johan', 'Ketiga', 'Keempat', 'Penyertaan']

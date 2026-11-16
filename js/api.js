@@ -35,7 +35,7 @@ window.KokuAPI = (function () {
   }
 
   return {
-    senaraiKelas: function () { return tangguh(D.kelas.slice()); },
+    senaraiKelas: function () { return tangguh(C.KELAS); },
 
     cariPelajar: function (f) {
       var q = String(f.q || '').trim().toLowerCase();
@@ -84,10 +84,11 @@ window.KokuAPI = (function () {
         && C.PERINGKAT.indexOf(b.peringkat) !== -1
         && C.PENCAPAIAN.indexOf(b.pencapaian) !== -1
         && kejohanan.length >= 3;
+      if (sah && !b.akuSijil) return gagal('Sila sahkan bahawa anda ada sijil atau bukti.');
       if (!sah) return gagal('Sila lengkapkan semua ruangan.');
       var semua = bacaPending();
       var senarai = semua[id] || [];
-      if (senarai.length >= 5) return gagal('Sudah ada 5 rekod menunggu pengesahan. Tunggu guru semak dahulu.');
+      if (senarai.length >= C.MAKS_MENUNGGU) return gagal('Sudah ada ' + C.MAKS_MENUNGGU + ' rekod menunggu pengesahan. Tunggu guru semak dahulu.');
       senarai.push({
         sukan: b.sukan, kejohanan: kejohanan, peringkat: b.peringkat, pencapaian: b.pencapaian,
         tahun: Number(b.tahun), status: 'Menunggu pengesahan'

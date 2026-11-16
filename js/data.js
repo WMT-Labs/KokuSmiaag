@@ -1,5 +1,5 @@
 /* DATA REKAAN untuk mod demo sahaja. Fail ini dibuang bila sistem disambung ke Apps Script.
-   700 pelajar dijana secara tetap (seed sama = data sama setiap kali). */
+   696 pelajar dijana secara tetap (seed sama = data sama setiap kali). */
 (function () {
   var C = window.KOKU_CONFIG;
 
@@ -26,8 +26,6 @@
     'Kamaruddin', 'Azman', 'Roslan', 'Hamzah', 'Jamaluddin', 'Shukor', 'Ghazali', 'Nordin', 'Halim', 'Sulaiman',
     'Mokhtar', 'Zainal', 'Fauzi', 'Rahim', 'Idris', 'Bakar', 'Hassan', 'Latif', 'Majid', 'Tahir'];
 
-  // SEMENTARA: nama kelas sebenar belum diterima.
-  var KELAS = ['Amanah', 'Bestari', 'Cekal', 'Dedikasi', 'Ehsan'];
   var RUMAH = Object.keys(C.RUMAH);
   var PANGKAT = ['Ahli', 'Ahli', 'Ahli', 'Ahli', 'Lans Koperal', 'Koperal', 'Sarjan', 'Ketua Platun'];
   var JAWATAN = ['Ahli', 'Ahli', 'Ahli', 'Ahli', 'Ahli', 'AJK', 'AJK', 'Bendahari', 'Setiausaha', 'Naib Pengerusi', 'Pengerusi'];
@@ -37,8 +35,9 @@
   var pelajar = [];
   var n = 0;
   for (var t = 1; t <= 5; t++) {
+    var KELAS = C.KELAS[t];
     for (var k = 0; k < KELAS.length; k++) {
-      for (var i = 0; i < 28; i++) {
+      for (var i = 0; i < 29; i++) {
         n++;
         var banin = r() < 0.5;
         var nama = banin
@@ -52,7 +51,7 @@
           tingkatan: t,
           kelas: KELAS[k],
           rumah: pick(RUMAH),
-          uniform: pick(C.UNIFORM),
+          uniform: pick(banin ? C.UNIFORM.slice(0, 3) : C.UNIFORM),
           pangkat: pick(PANGKAT),
           kelab: pick(C.KELAB),
           jawatan: pick(JAWATAN),
@@ -118,5 +117,5 @@
     { kumpulan: 'Penyelaras', nama: 'Ustaz Contoh Lapan', jawatan: 'Penyelaras Aktiviti Ekstra Kokurikulum', foto: '' }
   ];
 
-  window.KOKU_DUMMY = { pelajar: pelajar, guru: guru, kelas: KELAS, PIN_DEMO: '2468' };
+  window.KOKU_DUMMY = { pelajar: pelajar, guru: guru, PIN_DEMO: '2468' };
 })();
