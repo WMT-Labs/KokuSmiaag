@@ -1,0 +1,9 @@
+{
+  "name": "koku-smiaag",
+  "private": true,
+  "scripts": {
+    "bundle": "node scripts/bundle.js",
+    "test": "node scripts/bundle.js && node tests/uji.js",
+    "dev": "node scripts/bundle.js && node scripts/dev.js"
+  }
+}

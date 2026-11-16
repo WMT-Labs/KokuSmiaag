@@ -269,7 +269,7 @@
 
   function laluan() {
     var h = location.hash.replace(/^#\/?/, '');
-    var m = h.match(/^pelajar\/([A-Za-z0-9_-]{1,20})$/);
+    var m = h.match(/^pelajar\/([A-Za-z0-9_-]{1,64})$/);
     if (m) {
       tunjuk('profil');
       kosongkan($('profil'));
@@ -290,9 +290,7 @@
   }
 
   /* ---------- Mula ---------- */
-  document.addEventListener('DOMContentLoaded', function () {
-    if (C.DEMO) $('demo-bar').hidden = false;
-
+  function sedia() {
     isiSelect($('f-tingkatan'), [1, 2, 3, 4, 5].map(function (t) { return { v: t, t: 'Tingkatan ' + t }; }), 'Semua');
     API.senaraiKelas().then(function (peta) {
       function isiKelas() {
@@ -315,5 +313,14 @@
     pasangDialog();
     window.addEventListener('hashchange', laluan);
     laluan();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var demo = C.DEMO || !C.API_URL;
+    if (demo) $('demo-bar').hidden = false;
+    $('cari-status').textContent = 'Memuatkan…';
+    API.mula().then(function () { $('cari-status').textContent = ''; sedia(); }, function (e) {
+      $('cari-status').textContent = e.message;
+    });
   });
 })();

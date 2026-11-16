@@ -1,10 +1,10 @@
 /* Lapisan data. UI (app.js) hanya panggil fungsi di sini.
-   Mod demo: baca dari KOKU_DUMMY dalam browser.
-   Mod sebenar (nanti): setiap fungsi panggil Apps Script, dan tapisan medan dibuat DI SERVER
-   supaya pangkat/jawatan tidak pernah sampai ke browser tanpa PIN. */
+   Mod demo (DEMO: true): baca data rekaan dari js/data.js dalam browser.
+   Mod sebenar: setiap fungsi panggil Apps Script (backend/). Tapisan medan dibuat DI SERVER,
+   jadi pangkat dan jawatan tidak pernah sampai ke browser tanpa PIN. */
 window.KokuAPI = (function () {
   var C = window.KOKU_CONFIG;
-  var D = window.KOKU_DUMMY;
+  var D = null; // diisi oleh mula() dalam mod demo
   var MAX_HASIL = 25;
   var KEY_PENDING = 'koku_demo_pending';
 
@@ -34,7 +34,16 @@ window.KokuAPI = (function () {
     };
   }
 
-  return {
+  var demo = {
+    mula: function () {
+      return new Promise(function (ok, no) {
+        var t = document.createElement('script');
+        t.src = 'js/data.js';
+        t.onload = function () { D = window.KOKU_DUMMY; ok(); };
+        t.onerror = function () { no(new Error('Data demo gagal dimuatkan.')); };
+        document.head.appendChild(t);
+      });
+    },
     senaraiKelas: function () { return tangguh(C.KELAS); },
 
     cariPelajar: function (f) {
@@ -100,4 +109,43 @@ window.KokuAPI = (function () {
 
     guru: function () { return tangguh(D.guru.slice()); }
   };
+
+  /* ---------- Mod sebenar: Apps Script ---------- */
+  function panggil(action, params) {
+    var kawal = new AbortController();
+    var jam = setTimeout(function () { kawal.abort(); }, 25000);
+    // text/plain supaya browser tidak hantar preflight (Apps Script tidak menjawab OPTIONS).
+    return fetch(C.API_URL, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
+      body: JSON.stringify({ action: action, params: params || {} }), signal: kawal.signal
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      clearTimeout(jam);
+      if (!j || !j.ok) throw new Error((j && j.message) || 'Ralat sistem. Cuba lagi sebentar.');
+      return j.data;
+    }, function (e) {
+      clearTimeout(jam);
+      throw new Error('Tidak dapat menghubungi pelayan. Semak sambungan internet dan cuba lagi.');
+    });
+  }
+
+  var sebenar = {
+    // Ambil senarai rujukan (kelas, sukan, rumah, tahun) dari server supaya sama dengan Sheet.
+    mula: function () {
+      return panggil('RUJUKAN').then(function (r) {
+        C.TAHUN_SEMASA = r.tahun; C.KELAS = r.kelas; C.RUMAH = r.rumah; C.SUKAN = r.sukan;
+        C.KEBITARAAN = r.kebitaraan; C.PERINGKAT = r.peringkat; C.PENCAPAIAN = r.pencapaian;
+      });
+    },
+    senaraiKelas: function () { return Promise.resolve(C.KELAS); },
+    cariPelajar: function (f) { return panggil('CARI', { q: f.q, tingkatan: f.tingkatan, kelas: f.kelas }); },
+    profil: function (id) { return panggil('PROFIL', { id: id }); },
+    terperinci: function (id, pin) { return panggil('TERPERINCI', { id: id, pin: pin }); },
+    hantarPencapaian: function (id, b) {
+      return panggil('HANTAR', { id: id, sukan: b.sukan, kejohanan: b.kejohanan, peringkat: b.peringkat,
+        pencapaian: b.pencapaian, tahun: Number(b.tahun), akuSijil: b.akuSijil === true });
+    },
+    guru: function () { return panggil('GURU'); }
+  };
+
+  return C.DEMO || !C.API_URL ? demo : sebenar;
 })();

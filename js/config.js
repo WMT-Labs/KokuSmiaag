@@ -1,11 +1,13 @@
 /* Tetapan laman. Ubah di sini, bukan dalam app.js. */
 window.KOKU_CONFIG = {
-  // true = guna data rekaan dalam js/data.js. Tukar ke false bila Apps Script sudah siap.
+  // true = guna data rekaan dalam js/data.js. Untuk guna data sebenar: isi API_URL dan tukar DEMO ke false.
   DEMO: true,
 
-  // URL Apps Script Web App (diisi kemudian).
+  // Alamat Web App Apps Script (berakhir dengan /exec). Alamat ini BUKAN rahsia.
+  // JANGAN letak KUNCI_ADMIN atau ID Sheet di sini.
   API_URL: '',
 
+  // Senarai di bawah digunakan dalam mod demo sahaja. Dalam mod sebenar ia diganti dengan senarai dari Sheet (tab rujukan).
   TAHUN_SEMASA: 2026,
 
   RUMAH: {
