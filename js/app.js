@@ -241,6 +241,7 @@
   function paparGuru(senarai) {
     var k = $('guru');
     kosongkan(k);
+    if (!senarai.length) { k.appendChild(el('p', { class: 'status' }, 'Senarai guru koku belum dimasukkan.')); return; }
     var kumpulan = {};
     senarai.forEach(function (g) { (kumpulan[g.kumpulan] = kumpulan[g.kumpulan] || []).push(g); });
     Object.keys(kumpulan).forEach(function (nama) {
@@ -281,7 +282,7 @@
       window.scrollTo(0, 0);
     } else if (h === 'guru') {
       tunjuk('guru');
-      API.guru().then(paparGuru);
+      API.guru().then(paparGuru, function (e) { kosongkan($('guru')); $('guru').appendChild(el('p', { class: 'status' }, e.message)); });
       window.scrollTo(0, 0);
     } else {
       semasa = null;

@@ -15,7 +15,7 @@ http.createServer((req, res) => {
   const f = path.normalize(path.join(akar, req.url.split('?')[0] === '/' ? 'index.html' : req.url.split('?')[0]));
   if (!f.startsWith(akar) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.statusCode = 404; return res.end('404'); }
   let isi = fs.readFileSync(f);
-  if (req.url.startsWith('/js/config.js')) isi = String(isi).replace('DEMO: true', 'DEMO: false').replace("API_URL: ''", "API_URL: '/api'");
+  if (req.url.startsWith('/js/config.js')) isi = String(isi).replace(/DEMO: (true|false)/, 'DEMO: false').replace(/API_URL: '[^']*'/, "API_URL: '/api'");
   res.setHeader('Content-Type', jenis[path.extname(f)] || 'application/octet-stream');
   res.end(isi);
 }).listen(8081, () => console.log('http://localhost:8081\nKUNCI_ADMIN: ' + props.KUNCI_ADMIN));
