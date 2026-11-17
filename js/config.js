@@ -5,7 +5,7 @@ window.KOKU_CONFIG = {
 
   // Alamat Web App Apps Script (berakhir dengan /exec). Alamat ini BUKAN rahsia.
   // JANGAN letak KUNCI_ADMIN atau ID Sheet di sini.
-  API_URL: '',
+  API_URL: 'https://script.google.com/macros/s/AKfycbzteJllSo713lc0BMgRkU0PeKuzUNhkw75FeAiANWChM95WpN8RIo7-D-06jsMYAYc-/exec',
 
   // Senarai di bawah digunakan dalam mod demo sahaja. Dalam mod sebenar ia diganti dengan senarai dari Sheet (tab rujukan).
   TAHUN_SEMASA: 2026,
